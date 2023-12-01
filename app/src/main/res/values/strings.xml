@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">EMPAQ</string>
+    <string name="menu_home">HOME</string>
+    <string name="menu_chatbot">CHATBOT</string>
+    <string name="menu_profile">PROFILE</string>
+    <string name="logo_empaq_desc">LOGO EMPAQ</string>
 </resources>
