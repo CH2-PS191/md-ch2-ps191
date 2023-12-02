@@ -13,4 +13,7 @@
     <string name="help_support"><![CDATA[Help & Support]]></string>
     <string name="about_app">About App</string>
     <string name="profile_title">PROFILE</string>
+    <string name="chatbot_logo">Chatbot logo</string>
+    <string name="chatbot">Chatbot</string>
+    <string name="pakar_ahli">Pakar Ahli</string>
 </resources>
