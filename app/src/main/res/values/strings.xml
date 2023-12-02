@@ -4,4 +4,13 @@
     <string name="menu_chatbot">CHATBOT</string>
     <string name="menu_profile">PROFILE</string>
     <string name="logo_empaq_desc">LOGO EMPAQ</string>
+    <string name="profile_picture_desc">Profile Picture</string>
+    <string name="logout">Logout</string>
+    <string name="language">Language</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="preferences">Preferences</string>
+    <string name="more">More</string>
+    <string name="help_support"><![CDATA[Help & Support]]></string>
+    <string name="about_app">About App</string>
+    <string name="profile_title">PROFILE</string>
 </resources>
