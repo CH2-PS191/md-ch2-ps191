@@ -16,4 +16,7 @@
     <string name="chatbot_logo">Chatbot logo</string>
     <string name="chatbot">Chatbot</string>
     <string name="pakar_ahli">Pakar Ahli</string>
+    <string name="send_button">Send Button</string>
+    <string name="empaq_bot_title">EMPAQ BOT</string>
+    <string name="back_desc">Back Button</string>
 </resources>

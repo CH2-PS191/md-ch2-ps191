@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,16 +15,21 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MailOutline
+import androidx.compose.material.icons.rounded.KeyboardArrowLeft
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -57,6 +63,7 @@ fun EMPAQApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
 ) {
+    var topAppBarTitle by remember { mutableStateOf("EMPAQ") }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
@@ -65,15 +72,33 @@ fun EMPAQApp(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    if (currentRoute == Screen.Profile.route) {
+                    if (currentRoute == Screen.Profile.route || currentRoute == Screen.Chatbot.route) {
                         Text(
-                            text = stringResource(R.string.profile_title),
-                            modifier = Modifier.fillMaxHeight().wrapContentHeight(CenterVertically),
+                            text = topAppBarTitle,
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .wrapContentHeight(CenterVertically),
                             fontWeight = FontWeight.Bold,
                             fontSize = 28.sp,
                         )
                     } else {
                         Image(painter = painterResource(id = R.drawable.logo_w_empaq_black_text), contentDescription = stringResource(R.string.logo_empaq_desc))
+                    }
+                },
+                navigationIcon = {
+                    if (currentRoute == Screen.Chatbot.route) {
+                        IconButton(
+                            onClick = { navController.popBackStack() },
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .wrapContentHeight(Alignment.CenterVertically)
+                            ) {
+                            Icon(
+                                imageVector = Icons.Rounded.KeyboardArrowLeft,
+                                contentDescription = stringResource(R.string.back_desc),
+                                modifier = Modifier.fillMaxSize()
+                                )
+                        }
                     }
                 },
                 modifier = Modifier
@@ -83,7 +108,9 @@ fun EMPAQApp(
             )
         },
         bottomBar = {
-            BottomBar(navController = navController)
+            if (currentRoute != Screen.Chatbot.route) {
+                BottomBar(navController = navController)
+            }
         }
 
     ) { innerPadding ->
@@ -93,12 +120,15 @@ fun EMPAQApp(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Chatbot.route){
+                topAppBarTitle = stringResource(R.string.empaq_bot_title)
                 ChatbotScreen()
             }
             composable(Screen.Home.route){
+                topAppBarTitle = stringResource(R.string.app_name)
                 HomeScreen()
             }
             composable(Screen.Profile.route){
+                topAppBarTitle = stringResource(R.string.profile_title)
                 ProfileScreen()
             }
         }
