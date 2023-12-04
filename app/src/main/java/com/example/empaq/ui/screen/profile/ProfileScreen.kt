@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +36,8 @@ import org.intellij.lang.annotations.Language
 
 @Composable
 fun ProfileScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToDetail: () -> Unit
 ) {
     Column(
         modifier = Modifier.padding(horizontal = 30.dp),
@@ -43,7 +45,7 @@ fun ProfileScreen(
     ) {
 
         Spacer(modifier = Modifier.height(30.dp))
-        ProfileCard(photo = ProfileDummy.picture, name = ProfileDummy.name)
+        ProfileCard(photo = ProfileDummy.picture, name = ProfileDummy.name, onClick = navigateToDetail)
         Spacer(modifier = Modifier.height(25.dp))
 
         ProfileOption(
@@ -101,11 +103,13 @@ fun ProfileScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileCard(
     modifier: Modifier = Modifier,
     photo: String,
     name: String,
+    onClick: () -> Unit,
 
     ) {
     Card(
@@ -113,6 +117,7 @@ fun ProfileCard(
             .width(300.dp)
             .shadow(elevation = 8.dp, RoundedCornerShape(15.dp))
             .clip(RoundedCornerShape(15.dp)),
+        onClick = { onClick() }
     ) {
         Row(
             modifier = Modifier
@@ -141,5 +146,5 @@ fun ProfileCard(
 @Preview(showSystemUi = true)
 @Composable
 fun ProfileScreenPreview() {
-    ProfileScreen()
+    ProfileScreen(navigateToDetail = {})
 }

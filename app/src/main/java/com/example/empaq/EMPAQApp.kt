@@ -54,6 +54,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.empaq.ui.navigation.NavigationItem
 import com.example.empaq.ui.navigation.Screen
 import com.example.empaq.ui.screen.chatbot.ChatbotScreen
+import com.example.empaq.ui.screen.detail.DetailProfileScreen
 import com.example.empaq.ui.screen.home.HomeScreen
 import com.example.empaq.ui.screen.profile.ProfileScreen
 
@@ -72,7 +73,7 @@ fun EMPAQApp(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    if (currentRoute == Screen.Profile.route || currentRoute == Screen.Chatbot.route) {
+                    if (currentRoute != Screen.Home.route) {
                         Text(
                             text = topAppBarTitle,
                             modifier = Modifier
@@ -86,7 +87,7 @@ fun EMPAQApp(
                     }
                 },
                 navigationIcon = {
-                    if (currentRoute == Screen.Chatbot.route) {
+                    if (currentRoute == Screen.Chatbot.route || currentRoute == Screen.DetailProfile.route) {
                         IconButton(
                             onClick = { navController.popBackStack() },
                             modifier = Modifier
@@ -108,7 +109,7 @@ fun EMPAQApp(
             )
         },
         bottomBar = {
-            if (currentRoute != Screen.Chatbot.route) {
+            if (currentRoute != Screen.Chatbot.route && currentRoute != Screen.DetailProfile.route) {
                 BottomBar(navController = navController)
             }
         }
@@ -129,7 +130,22 @@ fun EMPAQApp(
             }
             composable(Screen.Profile.route){
                 topAppBarTitle = stringResource(R.string.profile_title)
-                ProfileScreen()
+                ProfileScreen(
+                    navigateToDetail = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.DetailProfile.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                )
+            }
+            composable(Screen.DetailProfile.route) {
+                topAppBarTitle = "UBAH PROFILE"
+                DetailProfileScreen()
             }
         }
 
