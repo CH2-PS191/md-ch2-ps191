@@ -57,6 +57,7 @@ import com.example.empaq.ui.screen.chatbot.ChatbotScreen
 import com.example.empaq.ui.screen.detail.DetailProfileScreen
 import com.example.empaq.ui.screen.home.HomeScreen
 import com.example.empaq.ui.screen.profile.ProfileScreen
+import com.example.empaq.ui.screen.specialist.SpecialistScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -87,7 +88,7 @@ fun EMPAQApp(
                     }
                 },
                 navigationIcon = {
-                    if (currentRoute == Screen.Chatbot.route || currentRoute == Screen.DetailProfile.route) {
+                    if (currentRoute == Screen.Chatbot.route || currentRoute == Screen.DetailProfile.route || currentRoute == Screen.Specialist.route) {
                         IconButton(
                             onClick = { navController.popBackStack() },
                             modifier = Modifier
@@ -109,7 +110,7 @@ fun EMPAQApp(
             )
         },
         bottomBar = {
-            if (currentRoute != Screen.Chatbot.route && currentRoute != Screen.DetailProfile.route) {
+            if (currentRoute != Screen.Chatbot.route && currentRoute != Screen.DetailProfile.route && currentRoute != Screen.Specialist.route) {
                 BottomBar(navController = navController)
             }
         }
@@ -126,7 +127,35 @@ fun EMPAQApp(
             }
             composable(Screen.Home.route){
                 topAppBarTitle = stringResource(R.string.app_name)
-                HomeScreen()
+                HomeScreen(
+                    navigateToProfile = {
+                        navController.navigate(Screen.Profile.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    navigateToChatbot = {
+                        navController.navigate(Screen.Chatbot.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    navigateToSpecialist = {
+                        navController.navigate(Screen.Specialist.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                )
             }
             composable(Screen.Profile.route){
                 topAppBarTitle = stringResource(R.string.profile_title)
@@ -146,6 +175,10 @@ fun EMPAQApp(
             composable(Screen.DetailProfile.route) {
                 topAppBarTitle = "UBAH PROFILE"
                 DetailProfileScreen()
+            }
+            composable(Screen.Specialist.route) {
+                topAppBarTitle = "PAKAR AHLI"
+                SpecialistScreen()
             }
         }
 

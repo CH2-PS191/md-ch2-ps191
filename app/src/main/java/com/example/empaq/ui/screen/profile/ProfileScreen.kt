@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -39,6 +40,79 @@ fun ProfileScreen(
     modifier: Modifier = Modifier,
     navigateToDetail: () -> Unit
 ) {
+//    LazyColumn(
+//        modifier = Modifier.padding(start = 30.dp, end = 30.dp, bottom = 1.dp),
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        item {
+//            Spacer(modifier = Modifier.height(30.dp))
+//            ProfileCard(photo = ProfileDummy.picture, name = ProfileDummy.name, onClick = navigateToDetail)
+//            Spacer(modifier = Modifier.height(25.dp))
+//        }
+//
+//        item {
+//            ProfileOption(
+//                modifier = Modifier,
+//                logo = R.drawable.ic_logout,
+//                name = stringResource(R.string.logout),
+//                cardShape = RoundedCornerShape(12.dp),
+//                onClick = { /*TODO*/ }
+//
+//            )
+//        }
+//
+//        item {
+//            Text(
+//                text = stringResource(R.string.preferences),
+//                fontWeight = FontWeight.SemiBold,
+//                fontSize = 18.sp,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(top = 35.dp, bottom = 15.dp)
+//            )
+//
+//            ProfileOption(
+//                logo = R.drawable.ic_language,
+//                name = stringResource(R.string.language),
+//                cardShape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
+//                onClick = { /*TODO*/ }
+//            )
+//            ProfileOption(
+//                logo = R.drawable.ic_darkmode,
+//                name = stringResource(R.string.dark_mode),
+//                cardShape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp),
+//                onClick = { /*TODO*/ }
+//            )
+//        }
+//
+//        item {
+//            Text(
+//                text = stringResource(R.string.more),
+//                fontWeight = FontWeight.SemiBold,
+//                fontSize = 18.sp,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(top = 35.dp, bottom = 15.dp)
+//            )
+//
+//            ProfileOption(
+//                logo = R.drawable.ic_bell,
+//                name = stringResource(R.string.help_support),
+//                cardShape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
+//                onClick = { /*TODO*/ }
+//            )
+//            ProfileOption(
+//                logo = R.drawable.ic_about,
+//                name = stringResource(R.string.about_app),
+//                cardShape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp),
+//                onClick = { /*TODO*/ }
+//            )
+//
+//            Spacer(modifier = modifier.height(10.dp))
+//        }
+//
+//    }
+    
     Column(
         modifier = Modifier.padding(horizontal = 30.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -100,6 +174,8 @@ fun ProfileScreen(
             cardShape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp),
             onClick = { /*TODO*/ }
         )
+
+        Spacer(modifier = modifier.height(50.dp))
     }
 }
 

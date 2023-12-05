@@ -5,5 +5,5 @@ sealed class Screen(val route: String) {
     object Chatbot : Screen("chatbot")
     object Profile : Screen("profile")
     object DetailProfile : Screen("detail")
-
+    object Specialist : Screen("specialist")
 }

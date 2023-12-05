@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,34 +37,39 @@ import com.example.empaq.R
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToProfile: () -> Unit,
+    navigateToChatbot: () -> Unit,
+    navigateToSpecialist: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(40.dp))
-        ProfileCardTwo(photo = ProfileDummy.picture, name = ProfileDummy.name, modifier = Modifier.padding(20.dp))
+        ProfileCardTwo(photo = ProfileDummy.picture, name = ProfileDummy.name, modifier = Modifier.padding(20.dp), onClick = navigateToProfile)
         Spacer(modifier = Modifier.height(50.dp))
 
-        HomeOption(photo = R.drawable.chatbot_photo, title = stringResource(id = R.string.chatbot)) {}
+        HomeOption(photo = R.drawable.chatbot_photo, title = stringResource(id = R.string.chatbot), onClick = navigateToChatbot)
         Spacer(modifier = Modifier.height(40.dp))
-        HomeOption(photo = R.drawable.pakar_ahli_photo, title = stringResource(R.string.pakar_ahli), photoSize = 220.dp) {}
+        HomeOption(photo = R.drawable.pakar_ahli_photo, title = stringResource(R.string.pakar_ahli), photoSize = 220.dp, onClick = navigateToSpecialist)
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileCardTwo(
     modifier: Modifier = Modifier,
     photo: String,
     name: String,
-
+    onClick: () -> Unit,
     ) {
     Card(
         modifier = Modifier
             .width(300.dp)
             .shadow(elevation = 8.dp, RoundedCornerShape(15.dp))
             .clip(RoundedCornerShape(15.dp)),
+        onClick = { onClick() }
     ) {
         Box(
             modifier = Modifier
@@ -97,5 +103,7 @@ fun ProfileCardTwo(
 @Preview(showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(navigateToProfile = { /*TODO*/ }, navigateToChatbot = { /*TODO*/ }) {
+
+    }
 }
