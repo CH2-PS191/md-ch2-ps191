@@ -52,7 +52,9 @@ fun HomeScreen(
 
         HomeOption(photo = R.drawable.chatbot_photo, title = stringResource(id = R.string.chatbot), onClick = navigateToChatbot)
         Spacer(modifier = Modifier.height(40.dp))
-        HomeOption(photo = R.drawable.pakar_ahli_photo, title = stringResource(R.string.pakar_ahli), photoSize = 220.dp, onClick = navigateToSpecialist)
+        HomeOption(photo = R.drawable.konselor_photo, title = stringResource(R.string.konselor_sebaya)) {}
+        Spacer(modifier = Modifier.height(40.dp))
+        HomeOption(photo = R.drawable.pakar_ahli_photo, title = stringResource(R.string.pakar_ahli), onClick = navigateToSpecialist)
     }
 }
 
