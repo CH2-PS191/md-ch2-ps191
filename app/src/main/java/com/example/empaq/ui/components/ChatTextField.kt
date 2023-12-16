@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -30,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.empaq.ui.theme.Whitebone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,7 +69,12 @@ fun ChatTextField(
                 }
             ),
             shape = MaterialTheme.shapes.small,
-            colors = TextFieldDefaults.textFieldColors(containerColor = Color.White)
+            colors = TextFieldDefaults.textFieldColors(
+                cursorColor = Color.Black,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                containerColor = Whitebone,
+            ),
         )
 
         CircleSendButton(

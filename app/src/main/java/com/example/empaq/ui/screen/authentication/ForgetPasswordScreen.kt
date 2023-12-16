@@ -1,5 +1,6 @@
 package com.example.empaq.ui.screen.authentication
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.example.empaq.ui.components.TabAuthForgetPassword
 import com.example.empaq.ui.theme.BlueLight
 import com.example.empaq.ui.theme.Whitebone
+import com.google.firebase.auth.FirebaseAuth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -92,24 +94,7 @@ fun ForgotPasswordScreen(
             value = email,
             onValueChange = { email = it },
             label = { Text(text = "Email") },
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                cursorColor = Color.Black,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                containerColor = Whitebone,
-            ),
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        TextField(
-            value = passwordEmail,
-            onValueChange = { passwordEmail = it },
-            label = { Text(text = "Password") },
-            visualTransformation = VisualTransformation.None,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp),
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.textFieldColors(
                 cursorColor = Color.Black,
@@ -125,11 +110,23 @@ fun ForgotPasswordScreen(
                 .fillMaxWidth()
                 .height(44.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .clickable { }
+                .clickable {
+                    try {
+                        FirebaseAuth.getInstance().sendPasswordResetEmail(email).addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Log.d("REMEMBER", "REMEMBER PASSWORD SUCCESSFUL")
+                            } else {
+                                Log.d("REMEMBER", "REMEMBER PASSWORD FAILED")
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.d("REMEMBER", "${e.message}")
+                    }
+                }
                 .background(BlueLight),
         ) {
             Text(
-                text = "Sign In",
+                text = "Reset Password",
                 modifier = Modifier
                     .fillMaxSize()
                     .wrapContentSize(Alignment.Center),

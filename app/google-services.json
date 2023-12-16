@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "781502273192",
+    "project_id": "capstone-ch2-ps191",
+    "storage_bucket": "capstone-ch2-ps191.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:781502273192:android:64318958e64843ac02149d",
+        "android_client_info": {
+          "package_name": "com.example.empaq"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiWqwIOwf7eLgZUJL2Zo4UofPkb0K0TvY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

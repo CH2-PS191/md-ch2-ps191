@@ -26,4 +26,5 @@
     <string name="title">Judul</string>
     <string name="email">Email</string>
     <string name="konselor_sebaya">Konselor Sebaya</string>
+    <string name="hide_password">Hide Password</string>
 </resources>

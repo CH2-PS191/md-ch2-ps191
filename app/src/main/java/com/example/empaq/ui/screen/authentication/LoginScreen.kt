@@ -1,5 +1,8 @@
 package com.example.empaq.ui.screen.authentication
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -11,7 +14,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -24,26 +33,54 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.empaq.R
+import com.example.empaq.data.EmpaqRepository
+import com.example.empaq.data.response.LoginResponse
+import com.example.empaq.data.retrofit.ApiConfig
 import com.example.empaq.ui.components.TabAuthLogin
+import com.example.empaq.ui.navigation.Screen
+import com.example.empaq.ui.screen.ViewModelFactory
 import com.example.empaq.ui.theme.BlueLight
 import com.example.empaq.ui.theme.Whitebone
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
+private val apiService = ApiConfig().getApiService()
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
+    navController: NavController = rememberNavController(),
+    navigateToRemember: () -> Unit,
+    navigateToRegister: () -> Unit,
+    finishLogin: () -> Unit,
+    viewModel: AuthViewModel = viewModel(factory = ViewModelFactory(repository = EmpaqRepository.getInstance(apiService)))
 ) {
+    val context = LocalContext.current
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    var showPassword by remember { mutableStateOf(false) }
 
     val forgotPassword = buildAnnotatedString {
         withStyle(style = SpanStyle(Color.Black)) {
@@ -93,11 +130,16 @@ fun LoginScreen(
             label = { Text(text = "Email") },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
+            singleLine = true,
             colors = TextFieldDefaults.textFieldColors(
                 cursorColor = Color.Black,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 containerColor = Whitebone,
+            ),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Next,
+                keyboardType = KeyboardType.Email,
             ),
         )
 
@@ -107,15 +149,41 @@ fun LoginScreen(
             value = password,
             onValueChange = { password = it },
             label = { Text(text = "Password") },
-            visualTransformation = VisualTransformation.None,
+            visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
+            singleLine = true,
             colors = TextFieldDefaults.textFieldColors(
                 cursorColor = Color.Black,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 containerColor = Whitebone,
             ),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Password
+            ),
+            trailingIcon = {
+                if (showPassword) {
+                    IconButton(
+                        onClick = { showPassword = false }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Visibility,
+                            contentDescription = stringResource(R.string.hide_password)
+                        )
+                    }
+                } else {
+                    IconButton(
+                        onClick = { showPassword = true }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.VisibilityOff,
+                            contentDescription = stringResource(R.string.hide_password)
+                        )
+                    }
+                }
+            },
         )
 
         Box(
@@ -124,7 +192,43 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .height(44.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .clickable { }
+                .clickable {
+                    if (email.isEmpty() || password.isEmpty()) {
+                        Toast.makeText(context, "Email dan Password Harus diisi dahulu", Toast.LENGTH_SHORT).show()
+                    } else {
+                        GlobalScope.launch(Dispatchers.Main) {
+                            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        finishLogin()
+                                        Log.d("LOGIN", "LOGIN SUCCESFULL")
+                                        Log.d("LOGIN", task.result.user!!.uid)
+                                        Log.d("LOGIN", task.result.user!!.displayName.toString())
+
+                                    } else {
+                                        Log.d("LOGIN", "LOGIN FAILED")
+                                        Toast.makeText(context, "Email atau Password Anda Salah", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                        }
+                    }
+
+//                    GlobalScope.launch(Dispatchers.Main) {
+//                        try {
+//                            val loginResponse: LoginResponse = viewModel.login(
+//                                email = email,
+//                                password = password,
+//                                returnSecureToken = true
+//                            )
+//                            navController.navigate(Screen.Home.route)
+//                            Log.d("LOGIN", "LOGIN SUCCESSFUL")
+//                            Log.d("LOGIN", loginResponse.idToken)
+//                        } catch (e: Exception) {
+//                            Log.d("LOGIN", "LOGIN FAILED: ${e.message}")
+//                        }
+//                    }
+
+                }
                 .background(BlueLight),
         ) {
             Text(
@@ -141,14 +245,14 @@ fun LoginScreen(
             text = forgotPassword,
             modifier = Modifier
                 .align(Alignment.Start)
-                .clickable { }
+                .clickable { navigateToRemember() }
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = signin,
             modifier = Modifier
                 .align(Alignment.Start)
-                .clickable { }
+                .clickable { navigateToRegister() }
         )
     }
 }
@@ -156,5 +260,5 @@ fun LoginScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen()
+//    LoginScreen()
 }

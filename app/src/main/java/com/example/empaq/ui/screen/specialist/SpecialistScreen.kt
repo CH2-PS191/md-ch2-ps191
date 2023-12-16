@@ -18,28 +18,28 @@ import com.example.empaq.data.EmpaqRepository
 import com.example.empaq.ui.components.PakarAhliOption
 import com.example.empaq.ui.screen.ViewModelFactory
 
-@Composable
-fun SpecialistScreen(
-    modifier: Modifier = Modifier,
-    viewModel: SpecialistViewModel = viewModel(factory = ViewModelFactory(EmpaqRepository())),
-) {
-    val groupedSpecialist by viewModel.groupedSpecialist.collectAsState()
-
-    LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(top = 20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        groupedSpecialist.forEach { (initial, specialists) ->
-            items(specialists) {specialist ->
-                PakarAhliOption(title = specialist.nama)
-                Spacer(modifier = Modifier.height(20.dp))
-            }
-        }
-    }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun SpecialistPreview() {
-    SpecialistScreen()
-}
+//@Composable
+//fun SpecialistScreen(
+//    modifier: Modifier = Modifier,
+//    viewModel: SpecialistViewModel = viewModel(factory = ViewModelFactory(EmpaqRepository())),
+//) {
+//    val groupedSpecialist by viewModel.groupedSpecialist.collectAsState()
+//
+//    LazyColumn(
+//        modifier = Modifier.fillMaxSize().padding(top = 20.dp),
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        groupedSpecialist.forEach { (initial, specialists) ->
+//            items(specialists) {specialist ->
+//                PakarAhliOption(title = specialist.nama)
+//                Spacer(modifier = Modifier.height(20.dp))
+//            }
+//        }
+//    }
+//}
+//
+//@Preview(showSystemUi = true)
+//@Composable
+//fun SpecialistPreview() {
+//    SpecialistScreen()
+//}

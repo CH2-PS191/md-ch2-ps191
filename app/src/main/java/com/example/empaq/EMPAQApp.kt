@@ -38,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -53,7 +54,9 @@ import com.example.empaq.ui.screen.chatbot.ChatbotScreen
 import com.example.empaq.ui.screen.detail.DetailProfileScreen
 import com.example.empaq.ui.screen.home.HomeScreen
 import com.example.empaq.ui.screen.profile.ProfileScreen
-import com.example.empaq.ui.screen.specialist.SpecialistScreen
+import com.google.firebase.auth.FirebaseAuth
+
+//import com.example.empaq.ui.screen.specialist.SpecialistScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,45 +71,53 @@ fun EMPAQApp(
     Scaffold(
         modifier = Modifier,
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    if (currentRoute != Screen.Home.route) {
-                        Text(
-                            text = topAppBarTitle,
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .wrapContentHeight(CenterVertically),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 28.sp,
-                        )
-                    } else {
-                        Image(painter = painterResource(id = R.drawable.logo_w_empaq_black_text), contentDescription = stringResource(R.string.logo_empaq_desc))
-                    }
-                },
-                navigationIcon = {
-                    if (currentRoute == Screen.Chatbot.route || currentRoute == Screen.DetailProfile.route || currentRoute == Screen.Specialist.route) {
-                        IconButton(
-                            onClick = { navController.popBackStack() },
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .wrapContentHeight(Alignment.CenterVertically)
-                            ) {
-                            Icon(
-                                imageVector = Icons.Rounded.KeyboardArrowLeft,
-                                contentDescription = stringResource(R.string.back_desc),
-                                modifier = Modifier.fillMaxSize()
-                                )
+            if (currentRoute != Screen.Login.route && currentRoute != Screen.Register.route && currentRoute != Screen.ForgotPassword.route) {
+                CenterAlignedTopAppBar(
+                    title = {
+                        if (currentRoute != Screen.Home.route) {
+                            Text(
+                                text = topAppBarTitle,
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .wrapContentHeight(CenterVertically),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 28.sp,
+                            )
+                        } else {
+                            Image(painter = painterResource(id = R.drawable.logo_w_empaq_black_text), contentDescription = stringResource(R.string.logo_empaq_desc))
                         }
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(72.dp)
-                    .shadow(elevation = 4.dp),
-            )
+                    },
+                    navigationIcon = {
+                        if (currentRoute == Screen.Chatbot.route || currentRoute == Screen.DetailProfile.route || currentRoute == Screen.Specialist.route) {
+                            IconButton(
+                                onClick = { navController.popBackStack() },
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .wrapContentHeight(Alignment.CenterVertically)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.KeyboardArrowLeft,
+                                    contentDescription = stringResource(R.string.back_desc),
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(72.dp)
+                        .shadow(elevation = 4.dp),
+                )
+            }
         },
         bottomBar = {
-            if (currentRoute != Screen.Chatbot.route && currentRoute != Screen.DetailProfile.route && currentRoute != Screen.Specialist.route) {
+            if (
+                currentRoute != Screen.Chatbot.route &&
+                currentRoute != Screen.DetailProfile.route &&
+                currentRoute != Screen.Specialist.route &&
+                currentRoute != Screen.Login.route &&
+                currentRoute != Screen.Register.route &&
+                currentRoute != Screen.ForgotPassword.route) {
                 BottomBar(navController = navController)
             }
         }
@@ -114,9 +125,12 @@ fun EMPAQApp(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Home.route,
+            startDestination = Screen.Main.route,
             modifier = Modifier.padding(innerPadding)
         ) {
+            composable(Screen.Main.route){
+                CheckAuthenticationAndNavigate(navController = navController)
+            }
             composable(Screen.Chatbot.route){
                 topAppBarTitle = stringResource(R.string.empaq_bot_title)
                 ChatbotScreen()
@@ -125,6 +139,7 @@ fun EMPAQApp(
                 topAppBarTitle = stringResource(R.string.app_name)
                 HomeScreen(
                     navigateToProfile = {
+                        navController.popBackStack()
                         navController.navigate(Screen.Profile.route) {
                             popUpTo(navController.graph.findStartDestination().id) {
                                 saveState = true
@@ -157,13 +172,18 @@ fun EMPAQApp(
                 topAppBarTitle = stringResource(R.string.profile_title)
                 ProfileScreen(
                     navigateToDetail = {
-                        navController.popBackStack()
                         navController.navigate(Screen.DetailProfile.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
+                            popUpTo(Screen.Profile.route) {
                                 saveState = true
                             }
                             launchSingleTop = true
                             restoreState = true
+                        }
+                    },
+                    logout = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Login.route) {
+                            launchSingleTop = true
                         }
                     }
                 )
@@ -174,13 +194,49 @@ fun EMPAQApp(
             }
             composable(Screen.Specialist.route) {
                 topAppBarTitle = "PAKAR AHLI"
-                SpecialistScreen()
+//                SpecialistScreen()
             }
             composable(Screen.Login.route) {
-                LoginScreen()
+                LoginScreen(
+                    navigateToRemember = {
+                        navController.navigate(Screen.ForgotPassword.route) {
+                            popUpTo(Screen.Login.route) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                        }
+                    },
+                    navigateToRegister = {
+                        navController.navigate(Screen.Register.route) {
+//                            popUpTo(Screen.Login.route) {
+//                                saveState = true
+//                            }
+//                            launchSingleTop = true
+                        }
+                    },
+                    finishLogin = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Home.route) {
+                            launchSingleTop = true
+                        }
+                    }
+                )
             }
             composable(Screen.Register.route) {
-                RegisterScreen()
+                RegisterScreen(
+                    finishRegister = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Login.route)
+                    },
+                    navigateToRemember = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.ForgotPassword.route)
+                    },
+                    navigateToLogin = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Login.route)
+                    }
+                )
             }
             composable(Screen.ForgotPassword.route) {
                 ForgotPasswordScreen()
@@ -241,6 +297,21 @@ private fun BottomBar(
                 }
             )
         }
+    }
+}
+
+@Composable
+fun CheckAuthenticationAndNavigate(navController: NavController) {
+    val user = FirebaseAuth.getInstance().currentUser
+
+    if (user != null) {
+        // User is authenticated, navigate to home screen
+        navController.popBackStack()
+        navController.navigate(Screen.Home.route)
+    } else {
+        // User is not authenticated, navigate to authentication screen
+        navController.popBackStack()
+        navController.navigate(Screen.Login.route)
     }
 }
 

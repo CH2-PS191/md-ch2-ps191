@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -33,6 +34,7 @@ import coil.compose.AsyncImage
 import com.example.empaq.model.ProfileDummy
 import com.example.empaq.ui.components.HomeOption
 import com.example.empaq.R
+import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
@@ -42,19 +44,28 @@ fun HomeScreen(
     navigateToChatbot: () -> Unit,
     navigateToSpecialist: () -> Unit,
 ) {
-    Column(
+    LazyColumn(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(40.dp))
-        ProfileCardTwo(photo = ProfileDummy.picture, name = ProfileDummy.name, modifier = Modifier.padding(20.dp), onClick = navigateToProfile)
-        Spacer(modifier = Modifier.height(50.dp))
+        item {
+            Spacer(modifier = Modifier.height(40.dp))
+            ProfileCardTwo(photo = ProfileDummy.picture, name = FirebaseAuth.getInstance().currentUser?.displayName.toString(), modifier = Modifier.padding(20.dp), onClick = navigateToProfile)
+            Spacer(modifier = Modifier.height(50.dp))
+        }
 
-        HomeOption(photo = R.drawable.chatbot_photo, title = stringResource(id = R.string.chatbot), onClick = navigateToChatbot)
-        Spacer(modifier = Modifier.height(40.dp))
-        HomeOption(photo = R.drawable.konselor_photo, title = stringResource(R.string.konselor_sebaya)) {}
-        Spacer(modifier = Modifier.height(40.dp))
-        HomeOption(photo = R.drawable.pakar_ahli_photo, title = stringResource(R.string.pakar_ahli), onClick = navigateToSpecialist)
+        item {
+            HomeOption(photo = R.drawable.chatbot_photo, title = stringResource(id = R.string.chatbot), onClick = navigateToChatbot)
+            Spacer(modifier = Modifier.height(40.dp))
+        }
+
+        item {
+            HomeOption(photo = R.drawable.konselor_photo, title = stringResource(R.string.konselor_sebaya)) {}
+            Spacer(modifier = Modifier.height(40.dp))
+        }
+        item {
+            HomeOption(photo = R.drawable.pakar_ahli_photo, title = stringResource(R.string.pakar_ahli), onClick = navigateToSpecialist)
+        }
     }
 }
 
