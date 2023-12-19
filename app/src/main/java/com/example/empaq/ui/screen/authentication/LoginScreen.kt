@@ -201,8 +201,10 @@ fun LoginScreen(
                                 .addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
                                         finishLogin()
+                                        val user = task.result.user
+                                        val token = user?.getIdToken(false)?.result?.token
                                         Log.d("LOGIN", "LOGIN SUCCESFULL")
-                                        Log.d("LOGIN", task.result.user!!.uid)
+                                        Log.d("LOGIN", token.toString())
                                         Log.d("LOGIN", task.result.user!!.displayName.toString())
 
                                     } else {

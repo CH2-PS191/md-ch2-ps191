@@ -43,6 +43,7 @@ fun HomeScreen(
     navigateToProfile: () -> Unit,
     navigateToChatbot: () -> Unit,
     navigateToSpecialist: () -> Unit,
+    navigateToKonselor: () -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -60,11 +61,13 @@ fun HomeScreen(
         }
 
         item {
-            HomeOption(photo = R.drawable.konselor_photo, title = stringResource(R.string.konselor_sebaya)) {}
+            HomeOption(photo = R.drawable.konselor_photo, title = stringResource(R.string.konselor_sebaya), onClick = navigateToKonselor)
             Spacer(modifier = Modifier.height(40.dp))
         }
+
         item {
             HomeOption(photo = R.drawable.pakar_ahli_photo, title = stringResource(R.string.pakar_ahli), onClick = navigateToSpecialist)
+            Spacer(modifier = Modifier.height(40.dp))
         }
     }
 }
@@ -116,7 +119,5 @@ fun ProfileCardTwo(
 @Preview(showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(navigateToProfile = { /*TODO*/ }, navigateToChatbot = { /*TODO*/ }) {
-
-    }
+    HomeScreen(navigateToProfile = { /*TODO*/ }, navigateToChatbot = { /*TODO*/ }, navigateToKonselor = {}, navigateToSpecialist = {})
 }

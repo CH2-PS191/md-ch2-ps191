@@ -52,6 +52,8 @@ fun ProfileScreen(
     navigateToDetail: () -> Unit,
     logout: () -> Unit
 ) {
+    val user = FirebaseAuth.getInstance().currentUser
+
     LazyColumn(
         modifier = Modifier.padding(start = 30.dp, end = 30.dp, bottom = 1.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -70,10 +72,10 @@ fun ProfileScreen(
                 cardShape = RoundedCornerShape(12.dp),
                 onClick = {
                     logout()
-                    GlobalScope.launch(Dispatchers.Main) {
-                        FirebaseAuth.getInstance().signOut()
-                        Log.d("LOGOUT", "LOGOUT SUCCESSFULL")
-                    }
+                    FirebaseAuth.getInstance().signOut()
+                    Log.d("LOGOUT", "LOGOUT SUCCESSFULL")
+//                    GlobalScope.launch(Dispatchers.Main) {
+//                    }
                 }
 
             )
@@ -217,7 +219,7 @@ fun MoreContent() {
         logo = R.drawable.ic_about,
         name = stringResource(R.string.about_app),
         cardShape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp),
-        onClick = { /*TODO*/ }
+        onClick = { Log.d("PERCOBAAN", "APAKAH BISA? ${FirebaseAuth.getInstance().currentUser?.getIdToken(false)?.result?.token}") }
     )
 }
 

@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,9 +47,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.empaq.R
+import com.example.empaq.data.EmpaqRepository
+import com.example.empaq.data.retrofit.ApiConfig
 import com.example.empaq.ui.components.TabAuthLogin
 import com.example.empaq.ui.components.TabAuthRegister
+import com.example.empaq.ui.screen.ViewModelFactory
 import com.example.empaq.ui.theme.BlueLight
 import com.example.empaq.ui.theme.Whitebone
 import com.google.firebase.auth.FirebaseAuth
@@ -68,6 +73,9 @@ fun RegisterScreen(
     navigateToLogin: () -> Unit,
     navigateToRemember: () -> Unit
 ) {
+    val viewModel: AuthViewModel = viewModel(factory = ViewModelFactory(EmpaqRepository(ApiConfig().getApiService())))
+//    val conversationId by viewModel.conversationId.collectAsState()
+
     val context = LocalContext.current
 
     var email by remember { mutableStateOf("") }
@@ -236,6 +244,8 @@ fun RegisterScreen(
                                                     Log.d("UPDATE-REGIST", "REGISTER UPDATE FAILED")
                                                 }
                                             }
+                                            // cara untuk fungsi Create Conversation Jalan
+                                            val token = user?.getIdToken(false)?.result?.token
                                             user?.sendEmailVerification()?.addOnCompleteListener { verificationTask ->
                                                 if (verificationTask.isSuccessful) {
                                                     Log.d("REGISTER", "Email verification sent.")
@@ -247,6 +257,15 @@ fun RegisterScreen(
                                             Log.d("REGISTER", "REGISTER FAILED")
                                         }
                                     }.await()
+
+                                val conversationResponse = viewModel.createConversation()
+                                if (conversationResponse?.success == true) {
+                                    Log.d("CREATE_CONVERSATION", "Conversation created successfully with ID: ${conversationResponse.id}")
+                                } else if (conversationResponse?.success == false) {
+                                    Log.d("CREATE_CONVERSATION", "Failed to create conversation: ${conversationResponse.message}")
+                                } else {
+                                    Log.d("CREATE_CONVERSATION", "Unknown error during conversation creation")
+                                }
 
                                 Log.d("REGISTER", "REGISTER SUCCESSFULL")
                                 finishRegister()

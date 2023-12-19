@@ -1,5 +1,6 @@
 package com.example.empaq.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -44,7 +45,9 @@ fun ChatTextField(
 
     Row(
         modifier = Modifier
+            .padding(top = 2.dp)
             .fillMaxWidth()
+            .background(Color.LightGray)
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -60,6 +63,7 @@ fun ChatTextField(
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Send
             ),
+            maxLines = 1,
             keyboardActions = KeyboardActions(
                 onSend = {
                     if (message.isNotBlank()) {
@@ -82,13 +86,14 @@ fun ChatTextField(
         ) {
             if (message.isNotBlank()) {
                 onSendMessage(message)
+                Log.d("onSendMessage", "Message sent: $message")
                 message = ""
             }
         }
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun ChatTextFieldPreview() {
     ChatTextField(onSendMessage = {})

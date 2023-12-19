@@ -12,3 +12,5 @@ val Pink40 = Color(0xFF7D5260)
 
 val BlueLight = Color(0xFF007AFF)
 val Whitebone = Color(0xFFF2F2F7)
+val Bluedish = Color(0xFF495d92)
+val bluefeather = Color(0xFFdde2f9)

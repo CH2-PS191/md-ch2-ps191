@@ -1,6 +1,9 @@
 package com.example.empaq.ui.screen.detail
 
 import android.content.Context
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -14,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -59,11 +63,13 @@ import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarConfig
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.calendar.models.CalendarStyle
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DetailProfileScreen(
     modifier: Modifier = Modifier,
@@ -95,6 +101,7 @@ fun DetailProfileScreen(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileList(
@@ -106,8 +113,23 @@ fun ProfileList(
     var expanded by remember { mutableStateOf(false) }
     var selectedGender by remember { mutableStateOf(ProfileDummy.gender) }
     val genderOptions = listOf(Gender.MALE, Gender.FEMALE)
-    
-    val selectedDates = remember { mutableStateOf<List<LocalDate>>(listOf()) }
+
+    val selectedDates = remember { mutableStateOf(ProfileDummy.dateOfBirth) }
+    val calendarState = rememberUseCaseState()
+    CalendarDialog(
+        state = calendarState,
+        config = CalendarConfig(
+            monthSelection = true,
+            yearSelection = true,
+        ),
+        selection = CalendarSelection.Date {date ->
+            selectedDates.value = date.toString()
+        }
+    )
+
+//    var selectedDate by remember { mutableStateOf(Calendar.getInstance()) }
+//
+//    var isCalendarDialogVisible by remember { mutableStateOf(false) }
 
     val icon = if (expanded)
         Icons.Filled.KeyboardArrowUp
@@ -169,18 +191,22 @@ fun ProfileList(
                     )
                 }
             }
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                genderOptions.forEach { gender ->
-                    DropdownMenuItem(
-                        text = { gender.label },
-                        onClick = {
-                            selectedGender =  gender.label
-                            expanded = false
-                        }
-                    )
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentSize(Alignment.BottomEnd)) {
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    genderOptions.forEach { gender ->
+                        DropdownMenuItem(
+                            text = { Text(text = gender.label) },
+                            onClick = {
+                                selectedGender =  gender.label
+                                expanded = false
+                            }
+                        )
+                    }
                 }
             }
 
@@ -216,33 +242,70 @@ fun ProfileList(
 //                }
 //            }
 
-            TextField(
-                value = ProfileDummy.dateOfBirth,
-                onValueChange = { ProfileDummy.dateOfBirth = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 10.dp),
-                shape = RoundedCornerShape(10.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    cursorColor = Color.Black,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    containerColor = Color.White,
-                    disabledLabelColor = Color.Black
-                ),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done
-                ),
-                trailingIcon = {
+            Box(modifier = Modifier
+                .padding(bottom = 10.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .clickable { calendarState.show() }) {
+                Row(
+                    modifier = Modifier
+                        .background(Color.White)
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = selectedDates.value,
+                        modifier = Modifier
+                            .padding(start = 15.dp)
+                            .weight(1f)
+                    )
+
                     Icon(
                         imageVector = Icons.Default.DateRange,
-                        contentDescription = "Calendar",
+                        contentDescription = "Calendar Button",
                         modifier = Modifier
-                            .size(40.dp)
                             .padding(end = 10.dp)
+                            .size(40.dp)
                     )
                 }
-            )
+            }
+
+//            TextField(
+//                value = selectedDates.toString(),
+//                onValueChange = {},
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(bottom = 10.dp),
+//                shape = RoundedCornerShape(10.dp),
+//                colors = TextFieldDefaults.textFieldColors(
+//                    cursorColor = Color.Black,
+//                    focusedIndicatorColor = Color.Transparent,
+//                    unfocusedIndicatorColor = Color.Transparent,
+//                    containerColor = Color.White,
+//                    disabledLabelColor = Color.Black
+//                ),
+//                keyboardOptions = KeyboardOptions.Default.copy(
+//                    imeAction = ImeAction.Done
+//                ),
+//                trailingIcon = {
+//                    Icon(
+//                        imageVector = Icons.Default.DateRange,
+//                        contentDescription = "Calendar",
+//                        modifier = Modifier
+//                            .size(40.dp)
+//                            .padding(end = 10.dp)
+//                            .clickable {
+//                                calendarState.show()
+//                            }
+//                    )
+//                }
+//            )
+
+//            if (isCalendarDialogVisible) {
+//                CalendarSample1 {
+//                    isCalendarDialogVisible = false
+//                }
+//            }
 
             ProfileListTitle(R.string.email)
             TextField(
@@ -267,7 +330,9 @@ fun ProfileList(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp)) {
         Button(onClick = { /*TODO*/ }, modifier = Modifier.align(Alignment.BottomCenter)) {
             Text(text = "UPDATE")
         }
@@ -284,29 +349,4 @@ fun ProfileListTitle(
         modifier = Modifier.padding(bottom = 8.dp),
         fontSize = 12.sp
     )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CalendarSample1(closeSelection: UseCaseState.() -> Unit) {
-
-    val selectedDates = remember { mutableStateOf<List<LocalDate>>(listOf()) }
-
-    CalendarDialog(
-        state = rememberUseCaseState(visible = true, onCloseRequest = { closeSelection() }),
-        config = CalendarConfig(
-            yearSelection = true,
-            monthSelection = true,
-            style = CalendarStyle.MONTH,
-        ),
-        selection = CalendarSelection.Dates { newDates ->
-            selectedDates.value = newDates
-        },
-    )
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun DetailProfileScreenPreview() {
-    ProfileList()
 }

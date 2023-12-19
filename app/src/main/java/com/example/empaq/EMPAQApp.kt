@@ -56,7 +56,8 @@ import com.example.empaq.ui.screen.home.HomeScreen
 import com.example.empaq.ui.screen.profile.ProfileScreen
 import com.google.firebase.auth.FirebaseAuth
 
-//import com.example.empaq.ui.screen.specialist.SpecialistScreen
+import com.example.empaq.ui.screen.pakar.SpecialistScreen
+import com.example.empaq.ui.screen.sebaya.KonselorSebayaScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,7 +72,7 @@ fun EMPAQApp(
     Scaffold(
         modifier = Modifier,
         topBar = {
-            if (currentRoute != Screen.Login.route && currentRoute != Screen.Register.route && currentRoute != Screen.ForgotPassword.route) {
+            if (currentRoute != Screen.Login.route && currentRoute != Screen.Register.route && currentRoute != Screen.ForgotPassword.route && currentRoute != Screen.Main.route) {
                 CenterAlignedTopAppBar(
                     title = {
                         if (currentRoute != Screen.Home.route) {
@@ -88,7 +89,7 @@ fun EMPAQApp(
                         }
                     },
                     navigationIcon = {
-                        if (currentRoute == Screen.Chatbot.route || currentRoute == Screen.DetailProfile.route || currentRoute == Screen.Specialist.route) {
+                        if (currentRoute == Screen.Chatbot.route || currentRoute == Screen.DetailProfile.route || currentRoute == Screen.Specialist.route || currentRoute == Screen.Konselor.route) {
                             IconButton(
                                 onClick = { navController.popBackStack() },
                                 modifier = Modifier
@@ -115,6 +116,7 @@ fun EMPAQApp(
                 currentRoute != Screen.Chatbot.route &&
                 currentRoute != Screen.DetailProfile.route &&
                 currentRoute != Screen.Specialist.route &&
+                currentRoute != Screen.Konselor.route &&
                 currentRoute != Screen.Login.route &&
                 currentRoute != Screen.Register.route &&
                 currentRoute != Screen.ForgotPassword.route) {
@@ -165,7 +167,16 @@ fun EMPAQApp(
                             launchSingleTop = true
                             restoreState = true
                         }
-                    }
+                    },
+                    navigateToKonselor = {
+                        navController.navigate(Screen.Konselor.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
                 )
             }
             composable(Screen.Profile.route){
@@ -184,6 +195,7 @@ fun EMPAQApp(
                         navController.popBackStack()
                         navController.navigate(Screen.Login.route) {
                             launchSingleTop = true
+                            restoreState = true
                         }
                     }
                 )
@@ -194,7 +206,11 @@ fun EMPAQApp(
             }
             composable(Screen.Specialist.route) {
                 topAppBarTitle = "PAKAR AHLI"
-//                SpecialistScreen()
+                SpecialistScreen()
+            }
+            composable(Screen.Konselor.route) {
+                topAppBarTitle = "KONSELOR SEBAYA"
+                KonselorSebayaScreen()
             }
             composable(Screen.Login.route) {
                 LoginScreen(
