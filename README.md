@@ -14,7 +14,7 @@ Follow these steps to install and run EMPAQ on your Android device:
 - **Internet Connection:** Make sure your device is connected to the internet.
 
 ### Getting Started
-- Download the latest release of EMPAQ from the [Release Page](https://github.com/your-username/empaq/releases).
+- Download the latest release of EMPAQ from the [Release Page](https://github.com/CH2-PS191/md-ch2-ps191/releases/tag/v1.0.0).
 - Install on Your Android Device
 - Open EMPAQ App
 - Create and Register Your Account
