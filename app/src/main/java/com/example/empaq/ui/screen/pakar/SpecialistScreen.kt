@@ -1,6 +1,5 @@
 package com.example.empaq.ui.screen.pakar
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize

@@ -62,86 +62,13 @@ fun ChatbotScreen(
             viewModel.setFirestoreDocumentPath("conversations/$convoId")
         }
     }
-//    Box(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .wrapContentHeight(Alignment.Bottom)
-//
-//    ) {
-//        ChatTextField(onSendMessage = {})
-//    }
 
 
 
     Column(
         modifier = Modifier.fillMaxSize(),
-//        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
     ) {
-//        Button(onClick = {
-//            Log.d("DITES", "$messages")
-//            Firebase.firestore.collection("conversations")
-//                .document("mi4NJk5nheQwnOfqvQDB")
-//                .collection("messages")
-//                .get()
-//                .addOnCompleteListener { querySnapshot ->
-//                    val messageList = mutableListOf<String>()
-//
-//                    for (document in querySnapshot.result.documents) {
-//                        val message = document.getString("message")
-//                        message.let {
-//                            messageList.add(it.toString())
-//                        }
-//                    }
-//
-//                    for ((index, message) in messageList.withIndex()) {
-//                        println("Message ${index + 1}: $message")
-//                    }
-//                } .addOnFailureListener { e ->
-//                    println("Gagal mengambil data: ${e.message}")
-//                }
-//        }) {
-//            Text(text = "Dicoba")
-//        }
-//        LazyColumn(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .weight(weight = 0.85f, fill = true),
-//            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-//            verticalArrangement = Arrangement.spacedBy(4.dp),
-//            reverseLayout = true
-//        ) {
-//            itemsIndexed(messages) { index, message ->
-//                val alignment = if (index % 2 == 0) Alignment.End else Alignment.Start
-//
-//                val backgroundColor = if (alignment == Alignment.End) {
-//                    Color.Blue
-//                } else {
-//                    Color.Gray
-//                }
-//
-//                val textColor = if (alignment == Alignment.End) {
-//                    Color.White
-//                } else {
-//                    Color.Black
-//                }
-//
-//                Column(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .background(color = backgroundColor)
-//                        .padding(8.dp)
-//                        .align(alignment),
-//                ) {
-//                    Text(
-//                        text = message,
-//                        color = textColor,
-//                        modifier = Modifier.padding(8.dp)
-//                    )
-//                }
-//            }
-//        }
-
         LazyColumn(Modifier.weight(1f), reverseLayout = true) {
             items(messages) { message ->
                 val isUserMessage = message.senderUid == FirebaseAuth.getInstance().currentUser?.uid

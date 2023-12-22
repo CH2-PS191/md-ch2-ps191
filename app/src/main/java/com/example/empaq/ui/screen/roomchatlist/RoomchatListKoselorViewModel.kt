@@ -18,7 +18,6 @@ class ConversationKonselorViewModel(private val repository: EmpaqRepository) : V
     val error: LiveData<String> get() = _error
 
     init {
-        // Call the function to fetch conversation list in the constructor
         getConversationList()
     }
 
@@ -27,7 +26,6 @@ class ConversationKonselorViewModel(private val repository: EmpaqRepository) : V
             try {
                 val response = repository.getConservationSebayaList()
                 if (response.success) {
-                    // Filter conversations with member count greater than three
                     val filteredConversations = response.conversations.filter { it.member.size > 2 }
                     _conversationList.postValue(filteredConversations)
                 } else {

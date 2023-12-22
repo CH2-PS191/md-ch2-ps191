@@ -1,21 +1,15 @@
 package com.example.empaq.ui.screen.roomchatlist
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.empaq.data.EmpaqRepository
-import com.example.empaq.data.response.SendChatbotRequest
 import com.example.empaq.data.response.SendUserRequest
 import com.example.empaq.ui.screen.chatbot.ChatMessage
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class RoomchatUserViewModel(private val repository: EmpaqRepository) : ViewModel() {
@@ -48,9 +42,6 @@ class RoomchatUserViewModel(private val repository: EmpaqRepository) : ViewModel
                         if (message != null && userUid != null && timestamp != null) {
                             messageList.add(ChatMessage(message, userUid, timestamp))
                         }
-//                        message?.let {
-//                            messageList.add(it)
-//                        }
                     }
 
                     _messages.value = messageList

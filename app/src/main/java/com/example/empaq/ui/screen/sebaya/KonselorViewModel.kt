@@ -11,12 +11,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class KonselorViewModel(private val repository: EmpaqRepository) : ViewModel() {
-//    private val _groupedSpecialist = MutableStateFlow(
-//        repository.getSpecialist()
-//            .sortedBy { it.nama }
-//            .groupBy { it.nama[0] }
-//    )
-//    val groupedSpecialist: StateFlow<Map<Char, List<Specialist>>> get() =_groupedSpecialist
 
     private val _groupedKonselor = MutableStateFlow<Map<Char?, List<SebayaItem?>>>(emptyMap())
     val groupedKonselor: StateFlow<Map<Char?, List<SebayaItem?>>> get() = _groupedKonselor
@@ -32,12 +26,9 @@ class KonselorViewModel(private val repository: EmpaqRepository) : ViewModel() {
             val konselorList = repository.getKonselorList().sebaya
             val grouped = konselorList?.sortedBy { it?.displayName }?.groupBy { it?.displayName!![0] }
 
-//            groupBy { it?.displayName?.firstOrNull()?.uppercaseChar() }
-//                ?: emptyMap()
 
             _groupedKonselor.value = grouped!!.toMap()
         } catch (e: Exception) {
-            // Handle error
             e.printStackTrace()
         }
     }
@@ -59,7 +50,6 @@ class KonselorViewModel(private val repository: EmpaqRepository) : ViewModel() {
                     Log.d("SPECIALIST", "${createConversationResponse.message}")
                 }
             } catch (e: Exception) {
-                // Handle error
                 e.printStackTrace()
             }
         }

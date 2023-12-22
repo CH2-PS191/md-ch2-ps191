@@ -30,7 +30,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.empaq.model.Profile
 import com.example.empaq.ui.components.HomeOption
 import com.example.empaq.R
 import com.google.firebase.auth.FirebaseAuth

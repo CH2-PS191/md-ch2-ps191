@@ -1,6 +1,5 @@
 package com.example.empaq.ui.screen.authentication
 
-import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -52,10 +51,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.empaq.R
 import com.example.empaq.data.EmpaqRepository
-import com.example.empaq.data.response.LoginResponse
 import com.example.empaq.data.retrofit.ApiConfig
 import com.example.empaq.ui.components.TabAuthLogin
-import com.example.empaq.ui.navigation.Screen
 import com.example.empaq.ui.screen.ViewModelFactory
 import com.example.empaq.ui.theme.BlueLight
 import com.example.empaq.ui.theme.Whitebone
@@ -215,21 +212,6 @@ fun LoginScreen(
                         }
                     }
 
-//                    GlobalScope.launch(Dispatchers.Main) {
-//                        try {
-//                            val loginResponse: LoginResponse = viewModel.login(
-//                                email = email,
-//                                password = password,
-//                                returnSecureToken = true
-//                            )
-//                            navController.navigate(Screen.Home.route)
-//                            Log.d("LOGIN", "LOGIN SUCCESSFUL")
-//                            Log.d("LOGIN", loginResponse.idToken)
-//                        } catch (e: Exception) {
-//                            Log.d("LOGIN", "LOGIN FAILED: ${e.message}")
-//                        }
-//                    }
-
                 }
                 .background(BlueLight),
         ) {
@@ -257,10 +239,4 @@ fun LoginScreen(
                 .clickable { navigateToRegister() }
         )
     }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun LoginScreenPreview() {
-//    LoginScreen()
 }

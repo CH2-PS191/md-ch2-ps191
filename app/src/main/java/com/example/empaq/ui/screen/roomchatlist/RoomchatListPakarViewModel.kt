@@ -19,7 +19,6 @@ class ConversationPakarViewModel(private val repository: EmpaqRepository) : View
     val error: LiveData<String> get() = _error
 
     init {
-        // Call the function to fetch conversation list in the constructor
         getConversationList()
     }
 

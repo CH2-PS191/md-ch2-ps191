@@ -39,12 +39,6 @@ class ChatbotViewModel(private val repository: EmpaqRepository) : ViewModel() {
             } catch (e: Exception) {
                 _conversationId.value = null
             }
-//            val response = repository.getConservationList()
-//            if (response.success == true) {
-//                _conversationId.value = response.conversations.first().id
-//            } else {
-//
-//            }
         }
     }
 
@@ -59,50 +53,11 @@ class ChatbotViewModel(private val repository: EmpaqRepository) : ViewModel() {
     }
 
     init {
-        // Mendengarkan perubahan pada koleksi pesan di Firestore
         _conversationId.value?.let { conversationId ->
-//            firestore.collection("conversations").document("mi4NJk5nheQwnOfqvQDB")
-//                .collection("messages")
-//                .addSnapshotListener { snapshot, error ->
-//                    if (error == null && snapshot != null) {
-//                        val messageList = mutableListOf<String>()
-//
-//                        for (document in snapshot.documents) {
-//                            val message = document.getString("message")
-//                            message?.let {
-//                                messageList.add(it)
-//                            }
-//                        }
-//
-//                        _messages.value = messageList
-//                        Log.d("Firebase", "Data berhasil diambil: ${messageList.size} pesan")
-//                    } else {
-//                        Log.d("Firebase", "Snapshot kosong")
-//                    }
-//                }
-
-//            firestore.collection("conversations")
-//                .whereEqualTo(conversationId, conversationId)
-//                .addSnapshotListener { value, e ->
-//                    if (e != null) {
-//                        return@addSnapshotListener
-//                    }
-//
-//                    val messages = ArrayList<String>()
-//                    for (doc in value!!) {
-//                        doc.getString("messages").let {
-//                            messages.add(it.toString())
-//                        }
-//                    }
-//
-//                    _messages.value = messages
-//                }
-
         }
     }
 
     fun setFirestoreDocumentPath(documentPath: String) {
-        // Mendengarkan perubahan pada dokumen tertentu di Firestore
         firestore.document(documentPath).collection("messages")
             .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->
@@ -117,9 +72,6 @@ class ChatbotViewModel(private val repository: EmpaqRepository) : ViewModel() {
                         if (message != null && userUid != null && timestamp != null) {
                             messageList.add(ChatMessage(message, userUid, timestamp))
                         }
-//                        message?.let {
-//                            messageList.add(it)
-//                        }
                     }
 
                     _messages.value = messageList

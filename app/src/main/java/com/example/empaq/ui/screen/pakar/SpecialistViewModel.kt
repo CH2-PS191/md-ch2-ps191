@@ -11,12 +11,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class SpecialistViewModel(private val repository: EmpaqRepository) : ViewModel() {
-//    private val _groupedSpecialist = MutableStateFlow(
-//        repository.getSpecialist()
-//            .sortedBy { it.nama }
-//            .groupBy { it.nama[0] }
-//    )
-//    val groupedSpecialist: StateFlow<Map<Char, List<Specialist>>> get() =_groupedSpecialist
 
     private val _groupedSpecialist = MutableStateFlow<Map<Char?, List<PakarItem?>>>(emptyMap())
     val groupedSpecialist: StateFlow<Map<Char?, List<PakarItem?>>> get() = _groupedSpecialist
@@ -32,12 +26,8 @@ class SpecialistViewModel(private val repository: EmpaqRepository) : ViewModel()
             val pakarList = repository.getPakarList().pakar
             val grouped = pakarList?.sortedBy { it?.displayName }?.groupBy { it?.displayName!![0] }
 
-//            groupBy { it?.displayName?.firstOrNull()?.uppercaseChar() }
-//                ?: emptyMap()
-
             _groupedSpecialist.value = grouped!!.toMap()
         } catch (e: Exception) {
-            // Handle error
             e.printStackTrace()
         }
     }
@@ -59,7 +49,6 @@ class SpecialistViewModel(private val repository: EmpaqRepository) : ViewModel()
                     Log.d("SPECIALIST", "${createConversationResponse.message}")
                 }
             } catch (e: Exception) {
-                // Handle error
                 e.printStackTrace()
             }
         }

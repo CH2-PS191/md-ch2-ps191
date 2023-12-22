@@ -22,21 +22,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.empaq.ui.theme.Bluedish
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Preview
 @Composable
 fun HelpandSupportScreen() {
@@ -46,21 +41,11 @@ fun HelpandSupportScreen() {
         var email by remember { mutableStateOf("") }
         var message by remember { mutableStateOf("") }
 
-        // Create a coroutine scope for keyboard control
-        val coroutineScope = rememberCoroutineScope()
-
-        // Retrieve the software keyboard controller
-        val keyboardController = LocalSoftwareKeyboardController.current
-
-        // Retrieve the UriHandler
-        val uriHandler = LocalUriHandler.current
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            // Email TextField
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -76,7 +61,6 @@ fun HelpandSupportScreen() {
                     .padding(bottom = 16.dp)
             )
 
-            // Message TextField
             OutlinedTextField(
                 value = message,
                 onValueChange = { message = it },
@@ -87,7 +71,6 @@ fun HelpandSupportScreen() {
                 ),
                 keyboardActions = KeyboardActions(
                     onSend = {
-                        // Handle sending the message
                         sendMessage(email, message, context)
                         message = ""
                         email = ""
@@ -99,10 +82,8 @@ fun HelpandSupportScreen() {
                     .padding(bottom = 16.dp)
             )
 
-            // Button
             Button(
                 onClick = {
-                    // Handle sending the message
                     sendMessage(email, message, context)
                     message = ""
                     email = ""

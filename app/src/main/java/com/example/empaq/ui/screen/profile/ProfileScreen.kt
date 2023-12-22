@@ -40,15 +40,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import coil.compose.AsyncImage
 import com.example.empaq.R
-import com.example.empaq.model.Profile
 import com.example.empaq.ui.components.ProfileOption
+import com.example.empaq.ui.theme.Bluedish
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -65,16 +64,13 @@ fun ProfileScreen(
     if (showLogoutDialog) {
         LogoutConfirmationDialog(
             onConfirm = {
-                // Perform logout
                 FirebaseAuth.getInstance().signOut()
                 logout()
                 Log.d("LOGOUT", "LOGOUT SUCCESSFULL")
 
-                // Dismiss the dialog
                 showLogoutDialog = false
             },
             onDismiss = {
-                // Dismiss the dialog
                 showLogoutDialog = false
             }
         )
@@ -115,70 +111,6 @@ fun ProfileScreen(
 
     }
 
-//    Column(
-//        modifier = Modifier.padding(horizontal = 30.dp),
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//
-//        Spacer(modifier = Modifier.height(30.dp))
-//        ProfileCard(photo = ProfileDummy.picture, name = ProfileDummy.name, onClick = navigateToDetail)
-//        Spacer(modifier = Modifier.height(25.dp))
-//
-//        ProfileOption(
-//            modifier = Modifier,
-//            logo = R.drawable.ic_logout,
-//            name = stringResource(R.string.logout),
-//            cardShape = RoundedCornerShape(12.dp),
-//            onClick = { /*TODO*/ }
-//
-//        )
-//
-//        Text(
-//            text = stringResource(R.string.preferences),
-//            fontWeight = FontWeight.SemiBold,
-//            fontSize = 18.sp,
-//            modifier = Modifier
-//                .align(Alignment.Start)
-//                .padding(top = 35.dp, bottom = 15.dp)
-//        )
-//
-//        ProfileOption(
-//            logo = R.drawable.ic_language,
-//            name = stringResource(R.string.language),
-//            cardShape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-//            onClick = { /*TODO*/ }
-//        )
-//        ProfileOption(
-//            logo = R.drawable.ic_darkmode,
-//            name = stringResource(R.string.dark_mode),
-//            cardShape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp),
-//            onClick = { /*TODO*/ }
-//        )
-//
-//        Text(
-//            text = stringResource(R.string.more),
-//            fontWeight = FontWeight.SemiBold,
-//            fontSize = 18.sp,
-//            modifier = Modifier
-//                .align(Alignment.Start)
-//                .padding(top = 35.dp, bottom = 15.dp)
-//        )
-//
-//        ProfileOption(
-//            logo = R.drawable.ic_bell,
-//            name = stringResource(R.string.help_support),
-//            cardShape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-//            onClick = { /*TODO*/ }
-//        )
-//        ProfileOption(
-//            logo = R.drawable.ic_about,
-//            name = stringResource(R.string.about_app),
-//            cardShape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp),
-//            onClick = { /*TODO*/ }
-//        )
-//
-//        Spacer(modifier = modifier.height(50.dp))
-//    }
 }
 
 @Composable
@@ -201,14 +133,16 @@ fun LogoutConfirmationDialog(
                     style = MaterialTheme.typography.bodyLarge.copy(fontSize = 15.sp),
                 )
                 Spacer(modifier = Modifier.height(15.dp))
-                // Additional content for the dialog if needed
             }
         },
         confirmButton = {
             Button(
                 onClick = {
                     onConfirm()
-                }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Bluedish
+                )
             ) {
                 Text("Yes")
             }
@@ -217,7 +151,10 @@ fun LogoutConfirmationDialog(
             Button(
                 onClick = {
                     onDismiss()
-                }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Bluedish
+                )
             ) {
                 Text("No")
             }

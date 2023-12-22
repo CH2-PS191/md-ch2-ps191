@@ -72,7 +72,6 @@ fun RegisterScreen(
     navigateToRemember: () -> Unit
 ) {
     val viewModel: AuthViewModel = viewModel(factory = ViewModelFactory(EmpaqRepository(ApiConfig().getApiService())))
-//    val conversationId by viewModel.conversationId.collectAsState()
 
         val context = LocalContext.current
 
@@ -220,14 +219,6 @@ fun RegisterScreen(
                     } else {
                         GlobalScope.launch(Dispatchers.Main) {
                             try {
-//                                val authResult = FirebaseAuth
-//                                    .getInstance()
-//                                    .createUserWithEmailAndPassword(email, password).await()
-//                                val user = authResult.user
-//                                val db = FirebaseFirestore.getInstance()
-//                                db.collection("users")
-//                                    .document(user?.uid ?: "")
-//                                    .set(mapOf("name" to nama))
                                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                                     .addOnCompleteListener { task ->
                                         if (task.isComplete) {

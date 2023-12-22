@@ -314,10 +314,6 @@ fun EMPAQApp(
                     },
                     navigateToRegister = {
                         navController.navigate(Screen.Register.route) {
-//                            popUpTo(Screen.Login.route) {
-//                                saveState = true
-//                            }
-//                            launchSingleTop = true
                         }
                     },
                     finishLogin = {
@@ -450,11 +446,9 @@ fun CheckAuthenticationAndNavigate(navController: NavController) {
     val user = FirebaseAuth.getInstance().currentUser
 
     if (user != null) {
-        // User is authenticated, navigate to home screen
         navController.popBackStack()
         navController.navigate(Screen.Home.route)
     } else {
-        // User is not authenticated, navigate to authentication screen
         navController.popBackStack()
         navController.navigate(Screen.Login.route) {
             launchSingleTop = true

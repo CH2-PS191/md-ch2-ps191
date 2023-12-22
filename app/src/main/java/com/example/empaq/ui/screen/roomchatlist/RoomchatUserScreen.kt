@@ -26,8 +26,6 @@ import com.google.firebase.auth.FirebaseAuth
 fun RoomchatUserScreen(
     roomchatUserViewModel: RoomchatUserViewModel
 ) {
-//    val viewModel: RoomchatUserViewModel = viewModel(factory = ViewModelFactory(EmpaqRepository(ApiConfig().getApiService())))
-    val selectedConversationId by roomchatUserViewModel.selectedConversationId.observeAsState()
     val messages by roomchatUserViewModel.messages.observeAsState(initial = emptyList())
 
     val conversationId = roomchatUserViewModel.selectedConversationId.value
@@ -49,12 +47,9 @@ fun RoomchatUserScreen(
         }
 
         ChatTextField(onSendMessage = { message ->
-//            conversationId?.let {convoId ->
-                Log.d("BERHASILKAH?", "$message")
-                roomchatUserViewModel.sendMessage(conversationId.toString(), message)
-//            }
+            Log.d("BERHASILKAH?", "$message")
+            roomchatUserViewModel.sendMessage(conversationId.toString(), message)
         }, modifier = Modifier.weight(1f))
     }
 
-//    Text(text = "Selected Conversation ID: $selectedConversationId")
 }

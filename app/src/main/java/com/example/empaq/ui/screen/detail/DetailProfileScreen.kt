@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -55,7 +56,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import com.example.empaq.R
 import com.example.empaq.data.EmpaqRepository
@@ -64,8 +64,8 @@ import com.example.empaq.data.retrofit.ApiConfig
 import com.example.empaq.model.Gender
 import com.example.empaq.model.Profile
 import com.example.empaq.ui.screen.ViewModelFactory
-import com.example.empaq.ui.screen.roomchatlist.ConversationKonselorViewModel
 import com.example.empaq.ui.theme.BlueLight
+import com.example.empaq.ui.theme.Bluedish
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.userProfileChangeRequest
 import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
@@ -92,7 +92,6 @@ fun DetailProfileScreen(
     val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { result: Uri? ->
         val uri: Uri? = result
         uri?.let {
-            // Do something with the selected image URI
             pictureUri = it
             viewModel.updateProfilePicture(getFileFromUri(context, uri))
             Toast.makeText(context, "Foto profil berhasil diperbarui!", Toast.LENGTH_SHORT).show();
@@ -170,10 +169,6 @@ fun ProfileList(
             selectedDates.value = date.toString()
         }
     )
-
-//    var selectedDate by remember { mutableStateOf(Calendar.getInstance()) }
-//
-//    var isCalendarDialogVisible by remember { mutableStateOf(false) }
 
     val icon = if (expanded)
         Icons.Filled.KeyboardArrowUp
@@ -256,36 +251,6 @@ fun ProfileList(
 
             ProfileListTitle(R.string.date_of_birth)
 
-//            Box(modifier = Modifier
-//                .padding(bottom = 10.dp)
-//                .clip(RoundedCornerShape(10.dp))
-//                ) {
-//                Row(
-//                    modifier = Modifier
-//                        .background(Color.White)
-//                        .fillMaxWidth()
-//                        .height(56.dp),
-//                    verticalAlignment = Alignment.CenterVertically
-//                ) {
-//                    Text(
-//                        text = selectedGender,
-//                        modifier = Modifier
-//                            .padding(start = 15.dp)
-//                            .weight(1f)
-//                    )
-//
-//                    Icon(
-//                        imageVector = Icons.Default.DateRange,
-//                        contentDescription = "open date",
-//                        modifier = Modifier
-//                            .padding(end = 10.dp)
-//                            .size(40.dp)
-//                            .clickable {
-//                            }
-//                    )
-//                }
-//            }
-
             Box(modifier = Modifier
                 .padding(bottom = 10.dp)
                 .clip(RoundedCornerShape(10.dp))
@@ -313,43 +278,6 @@ fun ProfileList(
                     )
                 }
             }
-
-//            TextField(
-//                value = selectedDates.toString(),
-//                onValueChange = {},
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(bottom = 10.dp),
-//                shape = RoundedCornerShape(10.dp),
-//                colors = TextFieldDefaults.textFieldColors(
-//                    cursorColor = Color.Black,
-//                    focusedIndicatorColor = Color.Transparent,
-//                    unfocusedIndicatorColor = Color.Transparent,
-//                    containerColor = Color.White,
-//                    disabledLabelColor = Color.Black
-//                ),
-//                keyboardOptions = KeyboardOptions.Default.copy(
-//                    imeAction = ImeAction.Done
-//                ),
-//                trailingIcon = {
-//                    Icon(
-//                        imageVector = Icons.Default.DateRange,
-//                        contentDescription = "Calendar",
-//                        modifier = Modifier
-//                            .size(40.dp)
-//                            .padding(end = 10.dp)
-//                            .clickable {
-//                                calendarState.show()
-//                            }
-//                    )
-//                }
-//            )
-
-//            if (isCalendarDialogVisible) {
-//                CalendarSample1 {
-//                    isCalendarDialogVisible = false
-//                }
-//            }
 
             ProfileListTitle(R.string.email)
             TextField(
@@ -387,7 +315,11 @@ fun ProfileList(
             )
             Toast.makeText(context, "DATA UPDATE SUCCESSFULL", Toast.LENGTH_SHORT).show()
             finishUpdateProfile()
-        }, modifier = Modifier.align(Alignment.BottomCenter)) {
+        }, modifier = Modifier.align(Alignment.BottomCenter),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Bluedish
+            )
+        ) {
             Text(text = "UPDATE")
         }
     }

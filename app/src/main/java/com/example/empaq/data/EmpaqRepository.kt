@@ -18,7 +18,6 @@ import com.example.empaq.data.retrofit.ApiService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.tasks.await
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -86,14 +85,6 @@ class EmpaqRepository(
             throw e
         }
     }
-
-//    fun getSpecialist(): List<Specialist> {
-//        return SpecialistDataResourceDummy.SpecialistList
-//    }
-
-//    suspend fun login(email: String, password: String, returnSecureToken: Boolean) : LoginResponse {
-//        return apiService.getPakar
-//    }
 
     companion object {
         @Volatile
