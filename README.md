@@ -18,6 +18,6 @@ Follow these steps to install and run EMPAQ on your Android device:
 - Install on Your Android Device
 - Open EMPAQ App
 - Create and Register Your Account
-- Explore the Features
+- Explore the Features ([demo](https://drive.google.com/drive/folders/1R-LP9ovEMwsxLfmtczcPTrp-gYphcpud?usp=sharing))
 
 **EMPAQ - Empathy, Support, Quality**
