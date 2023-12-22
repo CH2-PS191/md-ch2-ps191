@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EMPAQ</string>
+    <string name="app_name">EMPAQ App</string>
     <string name="menu_home">HOME</string>
     <string name="menu_chatbot">CHATBOT</string>
     <string name="menu_profile">PROFILE</string>

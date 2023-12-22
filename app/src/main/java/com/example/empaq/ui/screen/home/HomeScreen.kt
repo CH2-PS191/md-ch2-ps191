@@ -3,7 +3,6 @@ package com.example.empaq.ui.screen.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,7 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.empaq.model.ProfileDummy
+import com.example.empaq.model.Profile
 import com.example.empaq.ui.components.HomeOption
 import com.example.empaq.R
 import com.google.firebase.auth.FirebaseAuth
@@ -44,14 +43,21 @@ fun HomeScreen(
     navigateToChatbot: () -> Unit,
     navigateToSpecialist: () -> Unit,
     navigateToKonselor: () -> Unit,
+    navigateToLogin: () -> Unit,
 ) {
+    var user = FirebaseAuth.getInstance().currentUser
+
+    if (user == null) {
+        navigateToLogin()
+    }
+
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
             Spacer(modifier = Modifier.height(40.dp))
-            ProfileCardTwo(photo = ProfileDummy.picture, name = FirebaseAuth.getInstance().currentUser?.displayName.toString(), modifier = Modifier.padding(20.dp), onClick = navigateToProfile)
+            ProfileCardTwo(photo = user?.photoUrl.toString(), name = user?.displayName.toString(), modifier = Modifier.padding(20.dp), onClick = navigateToProfile)
             Spacer(modifier = Modifier.height(50.dp))
         }
 
@@ -119,5 +125,5 @@ fun ProfileCardTwo(
 @Preview(showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(navigateToProfile = { /*TODO*/ }, navigateToChatbot = { /*TODO*/ }, navigateToKonselor = {}, navigateToSpecialist = {})
+    HomeScreen(navigateToProfile = { /*TODO*/ }, navigateToChatbot = { /*TODO*/ }, navigateToKonselor = {}, navigateToSpecialist = {}, navigateToLogin = {})
 }

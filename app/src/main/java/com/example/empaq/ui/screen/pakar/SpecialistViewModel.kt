@@ -1,8 +1,10 @@
 package com.example.empaq.ui.screen.pakar
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.empaq.data.EmpaqRepository
+import com.example.empaq.data.response.AddSpecialistRequest
 import com.example.empaq.data.response.PakarItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,4 +41,28 @@ class SpecialistViewModel(private val repository: EmpaqRepository) : ViewModel()
             e.printStackTrace()
         }
     }
+
+    fun createConversationAndAddSpecialist(pakarUid: String) {
+        viewModelScope.launch {
+            try {
+                val createConversationResponse = repository.createConversation()
+                if (createConversationResponse.success) {
+                    val conversationId = createConversationResponse.id
+                    val pakarUid = AddSpecialistRequest(pakarUid)
+                    val addSpecialistResponse = repository.updateSpecialist(conversationId, pakarUid)
+                    if (addSpecialistResponse.success) {
+                        Log.d("SPECIALIST", "${addSpecialistResponse.message}")
+                    } else {
+                        Log.d("SPECIALIST", "${addSpecialistResponse.message}")
+                    }
+                } else {
+                    Log.d("SPECIALIST", "${createConversationResponse.message}")
+                }
+            } catch (e: Exception) {
+                // Handle error
+                e.printStackTrace()
+            }
+        }
+    }
+
 }

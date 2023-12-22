@@ -42,9 +42,11 @@ class SplashActivity : ComponentActivity() {
             Animatable(0f)
         }
         LaunchedEffect(key1 = true) {
-            alpha.animateTo(1f, animationSpec = tween(1500))
+            alpha.animateTo(1f, animationSpec = tween(1000))
             delay(2000)
-            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+            val intent = Intent(this@SplashActivity, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
         Box(
             modifier = Modifier

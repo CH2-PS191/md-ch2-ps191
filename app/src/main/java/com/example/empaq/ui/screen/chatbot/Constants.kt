@@ -29,28 +29,28 @@ data class ChatMessage(
     val timestamp: Timestamp
 )
 
-@Composable
-fun SingleMessage(message: String, isCurrentUser: Boolean) {
-    Card(
-        shape = RoundedCornerShape(16.dp),
-    ) {
-        Text(
-            text = message,
-            textAlign =
-            if (isCurrentUser)
-                TextAlign.End
-            else
-                TextAlign.Start,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            color = if (!isCurrentUser) MaterialTheme.colorScheme.primary else Color.White
-        )
-    }
-}
-
-@Preview
-@Composable
-fun singeMessagePreview() {
-    SingleMessage(message = "DICOBA GES", isCurrentUser = false)
-}
+//@Composable
+//fun SingleMessage(message: String, isCurrentUser: Boolean) {
+//    Card(
+//        shape = RoundedCornerShape(16.dp),
+//    ) {
+//        Text(
+//            text = message,
+//            textAlign =
+//            if (isCurrentUser)
+//                TextAlign.End
+//            else
+//                TextAlign.Start,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(16.dp),
+//            color = if (!isCurrentUser) MaterialTheme.colorScheme.primary else Color.White
+//        )
+//    }
+//}
+//
+//@Preview
+//@Composable
+//fun singeMessagePreview() {
+//    SingleMessage(message = "DICOBA GES", isCurrentUser = false)
+//}

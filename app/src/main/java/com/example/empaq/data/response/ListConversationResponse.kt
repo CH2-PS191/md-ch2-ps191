@@ -11,6 +11,24 @@ data class ListConversationResponse(
 	val conversations: List<ConversationsItem>
 )
 
+data class ListPakarConversationResponse(
+
+	@field:SerializedName("success")
+	val success: Boolean,
+
+	@field:SerializedName("conversations")
+	val conversations: List<ConversationsItem>
+)
+
+data class ListKonselorConversationResponse(
+
+	@field:SerializedName("success")
+	val success: Boolean,
+
+	@field:SerializedName("conversations")
+	val conversations: List<ConversationsItem>
+)
+
 data class ConversationsItem(
 
 	@field:SerializedName("member")

@@ -1,5 +1,7 @@
 package com.example.empaq.ui.screen.pakar
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -11,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -24,6 +27,7 @@ val apiService = ApiConfig().getApiService()
 fun SpecialistScreen(
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
     val viewModel: SpecialistViewModel = viewModel(factory = ViewModelFactory(EmpaqRepository(ApiConfig().getApiService())))
     val groupedSpecialist by viewModel.groupedSpecialist.collectAsState()
 
@@ -33,7 +37,13 @@ fun SpecialistScreen(
     ) {
         groupedSpecialist.forEach { (initial, specialists) ->
             items(specialists) {specialist ->
-                PakarAhliOption(title = specialist?.displayName.orEmpty())
+                PakarAhliOption(
+                    title = specialist?.displayName.orEmpty(),
+                    addPakar = {
+                        viewModel.createConversationAndAddSpecialist(specialist?.uid.toString())
+                        Toast.makeText(context,"Roomchat Berhasil Dibuat", Toast.LENGTH_SHORT).show()
+                    }
+                )
                 Spacer(modifier = Modifier.height(20.dp))
             }
         }

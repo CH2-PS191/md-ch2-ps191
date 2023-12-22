@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,12 +27,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.empaq.ui.theme.Bluedish
 import com.example.empaq.ui.theme.Purple40
 
 @Composable
 fun PakarAhliOption(
     modifier: Modifier = Modifier,
-    title: String
+    title: String,
+    addPakar: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -56,7 +59,7 @@ fun PakarAhliOption(
                 text = "Join Sekarang",
                 modifier = Modifier
             ) {
-                
+                addPakar()
             }
         }
     }
@@ -77,7 +80,11 @@ fun PakarAhliButton(
             .height(40.dp)
             .semantics(mergeDescendants = true) {
                 contentDescription = "Join Button"
-            }
+            },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Bluedish
+        )
+
     ) {
         Text(
             text = text,
@@ -90,8 +97,8 @@ fun PakarAhliButton(
 @Composable
 fun PakarAhliOptionPreview() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        PakarAhliOption(title = "PAKAR AHLI 1")
+        PakarAhliOption(title = "PAKAR AHLI 1", addPakar = {})
         Spacer(modifier = Modifier.height(20.dp))
-        PakarAhliOption(title = "PAKAR AHLI 2")
+        PakarAhliOption(title = "PAKAR AHLI 2", addPakar = {})
     }
 }

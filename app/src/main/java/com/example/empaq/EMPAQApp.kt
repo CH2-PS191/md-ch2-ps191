@@ -1,5 +1,7 @@
 package com.example.empaq
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.rounded.KeyboardArrowLeft
@@ -38,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -45,20 +49,30 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.empaq.data.EmpaqRepository
+import com.example.empaq.data.retrofit.ApiConfig
 import com.example.empaq.ui.navigation.NavigationItem
 import com.example.empaq.ui.navigation.Screen
+import com.example.empaq.ui.screen.ViewModelFactory
 import com.example.empaq.ui.screen.authentication.ForgotPasswordScreen
 import com.example.empaq.ui.screen.authentication.LoginScreen
 import com.example.empaq.ui.screen.authentication.RegisterScreen
 import com.example.empaq.ui.screen.chatbot.ChatbotScreen
 import com.example.empaq.ui.screen.detail.DetailProfileScreen
+import com.example.empaq.ui.screen.moreoptionprofile.HelpandSupportScreen
 import com.example.empaq.ui.screen.home.HomeScreen
+import com.example.empaq.ui.screen.moreoptionprofile.AboutAppScreen
 import com.example.empaq.ui.screen.profile.ProfileScreen
 import com.google.firebase.auth.FirebaseAuth
 
 import com.example.empaq.ui.screen.pakar.SpecialistScreen
+import com.example.empaq.ui.screen.roomchatlist.RoomchatListKonselorScreen
+import com.example.empaq.ui.screen.roomchatlist.RoomchatListPakarScreen
+import com.example.empaq.ui.screen.roomchatlist.RoomchatUserScreen
+import com.example.empaq.ui.screen.roomchatlist.RoomchatUserViewModel
 import com.example.empaq.ui.screen.sebaya.KonselorSebayaScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EMPAQApp(
@@ -68,6 +82,10 @@ fun EMPAQApp(
     var topAppBarTitle by remember { mutableStateOf("EMPAQ") }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+
+    val roomchatUserViewModel: RoomchatUserViewModel = viewModel(
+        factory = ViewModelFactory(EmpaqRepository(ApiConfig().getApiService()))
+    )
 
     Scaffold(
         modifier = Modifier,
@@ -89,7 +107,16 @@ fun EMPAQApp(
                         }
                     },
                     navigationIcon = {
-                        if (currentRoute == Screen.Chatbot.route || currentRoute == Screen.DetailProfile.route || currentRoute == Screen.Specialist.route || currentRoute == Screen.Konselor.route) {
+                        if (currentRoute == Screen.Chatbot.route ||
+                            currentRoute == Screen.DetailProfile.route ||
+                            currentRoute == Screen.Specialist.route ||
+                            currentRoute == Screen.Konselor.route ||
+                            currentRoute == Screen.ConversationsKonselor.route ||
+                            currentRoute == Screen.ConversationsPakar.route ||
+                            currentRoute == Screen.HelpnSupport.route ||
+                            currentRoute == Screen.About.route ||
+                            currentRoute == Screen.RoomchatUser.route
+                            ) {
                             IconButton(
                                 onClick = { navController.popBackStack() },
                                 modifier = Modifier
@@ -103,6 +130,28 @@ fun EMPAQApp(
                                 )
                             }
                         }
+                    },
+                    actions = {
+                              if (currentRoute == Screen.Konselor.route || currentRoute == Screen.Specialist.route) {
+                                  IconButton(
+                                      onClick = {
+                                          if (currentRoute == Screen.Konselor.route) {
+                                              navController.navigate(Screen.ConversationsKonselor.route)
+                                          } else if (currentRoute == Screen.Specialist.route) {
+                                              navController.navigate(Screen.ConversationsPakar.route)
+                                          }
+                                      },
+                                      modifier = Modifier
+                                          .fillMaxHeight()
+                                          .wrapContentHeight(Alignment.CenterVertically)
+                                  ) {
+                                      Icon(
+                                          imageVector = Icons.Default.Chat,
+                                          contentDescription = "List Roomchat",
+                                          modifier = Modifier.fillMaxSize()
+                                      )
+                                  }
+                              }
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -119,7 +168,12 @@ fun EMPAQApp(
                 currentRoute != Screen.Konselor.route &&
                 currentRoute != Screen.Login.route &&
                 currentRoute != Screen.Register.route &&
-                currentRoute != Screen.ForgotPassword.route) {
+                currentRoute != Screen.ForgotPassword.route &&
+                currentRoute != Screen.ConversationsKonselor.route &&
+                currentRoute != Screen.ConversationsPakar.route &&
+                currentRoute != Screen.RoomchatUser.route &&
+                currentRoute != Screen.HelpnSupport.route
+                ) {
                 BottomBar(navController = navController)
             }
         }
@@ -131,6 +185,7 @@ fun EMPAQApp(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Main.route){
+                topAppBarTitle = ""
                 CheckAuthenticationAndNavigate(navController = navController)
             }
             composable(Screen.Chatbot.route){
@@ -143,7 +198,7 @@ fun EMPAQApp(
                     navigateToProfile = {
                         navController.popBackStack()
                         navController.navigate(Screen.Profile.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
+                            popUpTo(Screen.Home.route) {
                                 saveState = true
                             }
                             launchSingleTop = true
@@ -152,7 +207,7 @@ fun EMPAQApp(
                     },
                     navigateToChatbot = {
                         navController.navigate(Screen.Chatbot.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
+                            popUpTo(Screen.Home.route) {
                                 saveState = true
                             }
                             launchSingleTop = true
@@ -161,7 +216,7 @@ fun EMPAQApp(
                     },
                     navigateToSpecialist = {
                         navController.navigate(Screen.Specialist.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
+                            popUpTo(Screen.Home.route) {
                                 saveState = true
                             }
                             launchSingleTop = true
@@ -170,13 +225,19 @@ fun EMPAQApp(
                     },
                     navigateToKonselor = {
                         navController.navigate(Screen.Konselor.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
+                            popUpTo(Screen.Home.route) {
                                 saveState = true
                             }
                             launchSingleTop = true
                             restoreState = true
                         }
                     },
+                    navigateToLogin = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Login.route) {
+                            launchSingleTop = true
+                        }
+                    }
                 )
             }
             composable(Screen.Profile.route){
@@ -194,6 +255,27 @@ fun EMPAQApp(
                     logout = {
                         navController.popBackStack()
                         navController.navigate(Screen.Login.route) {
+                            popUpTo(Screen.Main.route) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    helpAndSupport = {
+                        navController.navigate(Screen.HelpnSupport.route) {
+                            popUpTo(Screen.Profile.route) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    aboutApp = {
+                        navController.navigate(Screen.About.route) {
+                            popUpTo(Screen.Profile.route) {
+                                saveState = true
+                            }
                             launchSingleTop = true
                             restoreState = true
                         }
@@ -202,7 +284,15 @@ fun EMPAQApp(
             }
             composable(Screen.DetailProfile.route) {
                 topAppBarTitle = "UBAH PROFILE"
-                DetailProfileScreen()
+                DetailProfileScreen(
+                    navigateToProfile = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Profile.route) {
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                )
             }
             composable(Screen.Specialist.route) {
                 topAppBarTitle = "PAKAR AHLI"
@@ -255,7 +345,46 @@ fun EMPAQApp(
                 )
             }
             composable(Screen.ForgotPassword.route) {
-                ForgotPasswordScreen()
+                ForgotPasswordScreen(
+                    navigateToLogin = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Login.route)
+                    },
+                    navigateToRegister = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Register.route)
+                    },
+                )
+            }
+            composable(Screen.ConversationsKonselor.route) {
+                topAppBarTitle = "List Roomchat"
+                RoomchatListKonselorScreen(
+                    navigateToRoomchat = {
+                        navController.navigate(Screen.RoomchatUser.route)
+                    },
+                    roomchatUserViewModel = roomchatUserViewModel
+                )
+            }
+            composable(Screen.ConversationsPakar.route) {
+                topAppBarTitle = "List Roomchat"
+                RoomchatListPakarScreen(
+                    navigateToRoomchat = {
+                        navController.navigate(Screen.RoomchatUser.route)
+                    },
+                    roomchatUserViewModel = roomchatUserViewModel
+                )
+            }
+            composable(Screen.RoomchatUser.route) {
+                topAppBarTitle = "ROOM CHAT"
+                RoomchatUserScreen(roomchatUserViewModel = roomchatUserViewModel)
+            }
+            composable(Screen.HelpnSupport.route) {
+                topAppBarTitle = "HELP & SUPPORT"
+                HelpandSupportScreen()
+            }
+            composable(Screen.About.route) {
+                topAppBarTitle = "ABOUT"
+                AboutAppScreen()
             }
         }
 
@@ -327,10 +456,14 @@ fun CheckAuthenticationAndNavigate(navController: NavController) {
     } else {
         // User is not authenticated, navigate to authentication screen
         navController.popBackStack()
-        navController.navigate(Screen.Login.route)
+        navController.navigate(Screen.Login.route) {
+            launchSingleTop = true
+        }
+
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun EMPAQAppPreview() {

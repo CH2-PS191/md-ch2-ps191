@@ -1,5 +1,6 @@
 package com.example.empaq.ui.screen.authentication
 
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -24,7 +25,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,15 +51,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.empaq.R
 import com.example.empaq.data.EmpaqRepository
 import com.example.empaq.data.retrofit.ApiConfig
-import com.example.empaq.ui.components.TabAuthLogin
 import com.example.empaq.ui.components.TabAuthRegister
 import com.example.empaq.ui.screen.ViewModelFactory
 import com.example.empaq.ui.theme.BlueLight
 import com.example.empaq.ui.theme.Whitebone
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.userProfileChangeRequest
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -76,7 +74,7 @@ fun RegisterScreen(
     val viewModel: AuthViewModel = viewModel(factory = ViewModelFactory(EmpaqRepository(ApiConfig().getApiService())))
 //    val conversationId by viewModel.conversationId.collectAsState()
 
-    val context = LocalContext.current
+        val context = LocalContext.current
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -244,8 +242,19 @@ fun RegisterScreen(
                                                     Log.d("UPDATE-REGIST", "REGISTER UPDATE FAILED")
                                                 }
                                             }
-                                            // cara untuk fungsi Create Conversation Jalan
-                                            val token = user?.getIdToken(false)?.result?.token
+
+                                            val photoUrl = "https://fisika.uad.ac.id/wp-content/uploads/blank-profile-picture-973460_1280.png"
+                                            val defaultPhoto = UserProfileChangeRequest.Builder()
+                                                .setPhotoUri(Uri.parse(photoUrl))
+                                                .build()
+                                            user?.updateProfile(defaultPhoto)?.addOnCompleteListener { task ->
+                                                if (task.isSuccessful) {
+                                                    Log.d("UPDATE-PP", "ADDING PP SUCCESSFUL")
+                                                } else {
+                                                    Log.d("UPDATE-PP", "ADDING PP FAILED: ${task.exception}")
+                                                }
+                                            }
+
                                             user?.sendEmailVerification()?.addOnCompleteListener { verificationTask ->
                                                 if (verificationTask.isSuccessful) {
                                                     Log.d("REGISTER", "Email verification sent.")
@@ -269,6 +278,7 @@ fun RegisterScreen(
 
                                 Log.d("REGISTER", "REGISTER SUCCESSFULL")
                                 finishRegister()
+                                Toast.makeText(context, "Registrasi Berhasil!", Toast.LENGTH_SHORT).show()
                             } catch (e: Exception) {
                                 if (e.message == "The email address is already in use by another account.") {
                                     Toast.makeText(context, "Email Telah Terdaftar", Toast.LENGTH_SHORT).show()

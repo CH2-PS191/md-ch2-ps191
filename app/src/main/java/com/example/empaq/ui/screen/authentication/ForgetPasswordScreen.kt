@@ -28,7 +28,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -41,12 +40,13 @@ import com.google.firebase.auth.FirebaseAuth
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ForgotPasswordScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToRegister: () -> Unit,
+    navigateToLogin: () -> Unit,
 ) {
     var email by remember { mutableStateOf("") }
-    var passwordEmail by remember { mutableStateOf("") }
 
-    val forgotPassword = buildAnnotatedString {
+    val register = buildAnnotatedString {
         withStyle(style = SpanStyle(Color.Black)) {
             append("Belum Punya Akun? ")
         }
@@ -136,17 +136,21 @@ fun ForgotPasswordScreen(
         }
 
         Text(
-            text = forgotPassword,
+            text = register,
             modifier = Modifier
                 .align(Alignment.Start)
-                .clickable { }
+                .clickable {
+                    navigateToRegister()
+                }
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = signin,
             modifier = Modifier
                 .align(Alignment.Start)
-                .clickable { }
+                .clickable {
+                    navigateToLogin()
+                }
         )
     }
 }

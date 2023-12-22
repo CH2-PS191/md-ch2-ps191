@@ -63,7 +63,7 @@ fun ChatTextField(
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Send
             ),
-            maxLines = 1,
+            maxLines = 3,
             keyboardActions = KeyboardActions(
                 onSend = {
                     if (message.isNotBlank()) {

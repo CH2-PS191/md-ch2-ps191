@@ -11,4 +11,9 @@ sealed class Screen(val route: String) {
     object Register : Screen("register")
     object ForgotPassword : Screen("forgot_password")
     object Main : Screen("main")
+    object ConversationsKonselor : Screen("konselor/conversationKonselor")
+    object ConversationsPakar : Screen("Pakar/conversationPakar")
+    object RoomchatUser : Screen("conversations/roomchat")
+    object HelpnSupport : Screen("profile/HelpnSupport")
+    object About : Screen("profile/About")
 }
