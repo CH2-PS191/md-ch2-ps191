@@ -4,7 +4,7 @@ EMPAQ is a mental health application implemented using Jetpack Compose and Fireb
 ## Features
 - **Chatbot Interaction:** Initiate conversations with a supportive chatbot.
 - **Peer Counselors:** Connect with trained peer counselors who provide compassionate and understanding support.
-- ***Expert Advisors:** Seek guidance from experienced mental health professionals who offer specialized advice tailored to your needs.
+- **Expert Advisors:** Seek guidance from experienced mental health professionals who offer specialized advice tailored to your needs.
   
 ## Installation
 Follow these steps to install and run EMPAQ on your Android device:
